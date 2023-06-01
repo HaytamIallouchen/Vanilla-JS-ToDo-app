@@ -6,20 +6,23 @@ function generateTodoList(listToGenerate) {
     let todoUlElement = document.getElementById("todo-list");
     todoUlElement.innerHTML = "";
     return listToGenerate.forEach((element) => {
-        const toDo = element.split('-')[0]
-        const status = element.split('-')[1]
-        const html = 
+        const toDo = element.split('-')[0];
+        const status = element.split('-')[1];
+        const html =
         `<li id="${listToGenerate.indexOf(element)}" class="flex justify-between border-b py-3">
             <div class="flex">
-                <button class="bg-slate-500 text-white p-1 m-1 text-xl rounded" onclick="status()">${status === "notdone" ? 'Set done' : 'Set not done'}</button>
-                <p class="self-center text-lg text-white px-3 py-1 rounded${status === "done" ? " bg-green-600" : " bg-red-600"}">${toDo}</p>
+                <button class="bg-slate-500 text-white p-1 m-1 text-xl rounded" onclick="update()">
+                    ${status === "notdone" ? 'Set done' : 'Set not done'}
+                </button>
+                <p class="self-center text-lg text-white px-3 py-1 rounded
+                    ${status === "done" ? " bg-green-600" : " bg-red-600"}">${toDo}</p>
             </div>
             <div class="flex">
                 <button class="bg-slate-500 text-white p-1 m-1 text-xl rounded" onclick="edit()">Edit</button>
                 <button class="bg-slate-500 text-white p-1 m-1 text-xl rounded" onclick="del()">Delete</button>
             </div>
         </li>`;
-        todoUlElement.innerHTML = todoUlElement.innerHTML + html;
+        todoUlElement.innerHTML += html;
     });
 }
 
@@ -27,18 +30,20 @@ function generateTodoList(listToGenerate) {
 function add() {
     let todoUlElement = document.getElementById("todo-list");
     let addButton = document.getElementById("addButton");
-    if (addButton.innerText === "x") {
-        addButton.innerText = "+";
-        const addRow = document.getElementById("add");
-        return addRow.remove();
-    }
-    const element =
+    if (addButton.innerText === "+") {
+        const element =
         `<li id="add" class="flex justify-between border-b py-3">
-            <input type="text" id="newTodo" class="self-center bg-slate-600 text-white py-2 ps-2 rounded" placeholder="Add ToDo">
+            <input type="text" id="newTodo" class="self-center bg-slate-600 text-white py-2 ps-2 rounded"
+            placeholder="Add ToDo">
             <button class="bg-slate-500 text-white p-1 m-1 text-xl rounded" onclick="save()">Add</button>
         </li>`;
-    todoUlElement.innerHTML = element + todoUlElement.innerHTML;
-    return addButton.innerText = "x";
+        todoUlElement.innerHTML = element + todoUlElement.innerHTML;
+        addButton.innerText = "x";
+        return;
+    }
+    addButton.innerText = "+";
+    const addRow = document.getElementById("add");
+    addRow.remove();
 }
 
 function save() {
@@ -48,7 +53,7 @@ function save() {
     } else {
         localStorage.setItem("todoList", todo + "-notdone," + localStorage.getItem("todoList"));
     }
-    return location.reload();
+    window.location.reload();
 }
 
 function edit() {
@@ -60,28 +65,29 @@ function edit() {
         buttons[0].innerHTML = "Save";
         buttons[1].innerHTML = "Cancel";
         buttons[1].setAttribute("onclick", "location.reload()");
-        par.innerHTML = `<input type="text" id="editTodo" class="self-center bg-slate-600 text-white py-2 ps-2 rounded" placeholder="Edit ToDo" value=${par.innerHTML}>`;
+        par.innerHTML = `<input type="text" id="editTodo" class="self-center bg-slate-600\
+        text-white py-2 ps-2 rounded" placeholder="Edit ToDo" value=${par.innerHTML}>`;
         return;
     }
     todoList[parentElement.id] = `${document.getElementById("editTodo").value}-${status}`;
     localStorage.setItem("todoList", todoList.join(','));
-    return location.reload();
+    window.location.reload();
 }
 
 function del() {
     const id = this.document.activeElement.parentElement.parentElement.id;
     todoList.splice(id, 1);
     localStorage.setItem("todoList", todoList.join(','));
-    return location.reload();
+    window.location.reload();
 }
 
-function status() {
+function update() {
     const id = this.document.activeElement.parentElement.parentElement.id;
     const toDo = todoList[id].split('-')[0];
     const newStatus = todoList[id].split('-')[1] === "notdone" ? "done" : "notdone";
     todoList[id] = `${toDo}-${newStatus}`;
-    localStorage.setItem("todoList", todoList.length === 1 ? todoList[0] : todoList.join(','));    
-    return location.reload();
+    localStorage.setItem("todoList", todoList.length === 1 ? todoList[0] : todoList.join(','));
+    window.location.reload();
 }
 
 function filter() {
@@ -104,7 +110,7 @@ function showNoTodoListMessage() {
         `<li id="noTodoList" class="flex justify-center py-3">
             <p class="self-center text-lg text-white px-3 py-1">No ToDo List</p>
         </li>`;
-    return todoUlElement.innerHTML = element;
+    todoUlElement.innerHTML = element;
 }
 
 function search() {
@@ -117,4 +123,8 @@ function search() {
 }
 
 // show todo list if exists:
-localStorage.getItem("todoList") ? generateTodoList(todoList) : showNoTodoListMessage();
+if (localStorage.getItem("todoList")) {
+    generateTodoList(todoList);
+} else {
+    showNoTodoListMessage();
+}
