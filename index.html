@@ -6,14 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
 </head>
 <body class="bg-slate-200">
     <div class="sm:container mx-auto">
         <nav class="w-full flex justify-between bg-slate-500 rounded-b-lg">
             <div class="p-2 text-xl text-white m-2 bg-slate-600 rounded">ToDo</div>
             <div class="self-center mx-6 rounded flex">
-                <input type="text" name="search" id="search" class="bg-slate-600 text-white py-2 ps-2 rounded-l" placeholder="Zoek je To Do">
+                <input type="text" name="search" id="search" class="bg-slate-600 text-white py-2 ps-2 rounded-l" placeholder="Zoek je To Do" onkeyup="search()">
                 <button class="bg-slate-600 text-white p-2 text-xl rounded-r" id="addButton" onclick="add()">+</button>
             </div>
         </nav>

@@ -107,5 +107,14 @@ function showNoTodoListMessage() {
     return todoUlElement.innerHTML = element;
 }
 
+function search() {
+    const searchValue = this.document.activeElement.value;
+    if (searchValue === "") {
+        return generateTodoList(todoList);
+    } else {
+        return generateTodoList(todoList.filter((element) => element.split('-')[0].includes(searchValue)));
+    }
+}
+
 // show todo list if exists:
 localStorage.getItem("todoList") ? generateTodoList(todoList) : showNoTodoListMessage();
