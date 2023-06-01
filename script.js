@@ -71,14 +71,14 @@ function edit() {
     }
     todoList[parentElement.id] = `${document.getElementById("editTodo").value}-${status}`;
     localStorage.setItem("todoList", todoList.join(','));
-    window.location.reload();
+    generateTodoList(todoList)
 }
 
 function del() {
     const id = this.document.activeElement.parentElement.parentElement.id;
     todoList.splice(id, 1);
     localStorage.setItem("todoList", todoList.join(','));
-    window.location.reload();
+    generateTodoList(todoList)
 }
 
 function update() {
@@ -87,7 +87,7 @@ function update() {
     const newStatus = todoList[id].split('-')[1] === "notdone" ? "done" : "notdone";
     todoList[id] = `${toDo}-${newStatus}`;
     localStorage.setItem("todoList", todoList.length === 1 ? todoList[0] : todoList.join(','));
-    window.location.reload();
+    generateTodoList(todoList)
 }
 
 function filter() {
